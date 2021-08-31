@@ -12,8 +12,8 @@
             Adicionar Restaurante
         </button>
     </div>
-        
     @endif
+    <br/><br/>
     <ul class="list-group">
         @foreach($restaurantes as $r)
             <li 

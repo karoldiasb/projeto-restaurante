@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use App\Services\RestauranteService;
 
 class RestauranteController extends Controller
 {
@@ -14,13 +14,16 @@ class RestauranteController extends Controller
      */
     public function index()
     {
-        $response = Http::get('http://localhost:8081/api/restaurantes');
-        $restaurantes = $response->json()['results'];
-
-        return view(
-            'home',
-            compact('restaurantes')
-        );
+        $response = RestauranteService::index();
+        $success = $response->json()['success'];
+        if($success){
+            $restaurantes = $response->json()['results'];
+            return view(
+                'home',
+                compact('restaurantes')
+            );
+        }
+        return $this->returnError($response, 'home');
     }
 
     /**
@@ -42,10 +45,12 @@ class RestauranteController extends Controller
     public function store(Request $request)
     {
         $token = session('token');
-        $response = Http::withToken($token)->post('http://localhost:8081/api/restaurantes', [
-            'nome' => $request->nome,
-        ]);
-        return redirect()->route('restaurantes.index');
+        $response = RestauranteService::save($token, $request->nome);
+        $success = $response->json()['success'];
+        if($success){
+            return redirect()->route('restaurantes.index');
+        }
+        return $this->returnError($response, 'restaurante.cadastro');
     }
 
     /**
@@ -56,13 +61,16 @@ class RestauranteController extends Controller
      */
     public function show($id)
     {
-        $response = Http::get('http://localhost:8081/api/restaurantes/' . $id);
-        $restaurante = $response->json();
-
-        return view(
-            'home',
-            compact('restaurante')
-        );
+        $response = RestauranteService::getById($id);
+        $success = $response->json()['success'];
+        if($success){
+            $restaurante = $response->json()['results'];
+            return view(
+                'home',
+                compact('restaurante')
+            );
+        }
+        return $this->returnError($response, 'home');
     }
 
     /**
@@ -97,5 +105,15 @@ class RestauranteController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function returnError($response, $view)
+    {
+        $msg = $response->json()['message'];
+        $error_validator = $response->json()['error_validator'];
+        return view(
+            $view,
+            compact(['msg', 'error_validator'])
+        );
     }
 }
