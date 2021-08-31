@@ -15,7 +15,7 @@
             <a class="navbar-brand" href="/logout">Sair</a>
         @else
             <a class="navbar-brand" href="/login">Entrar</a>
-            <a class="navbar-brand" href="#">Registrar</a>
+            <a class="navbar-brand" href="/registrar">Registrar</a>
         @endif
     </nav>
     <div class="container" style="margin-top: 3rem">
