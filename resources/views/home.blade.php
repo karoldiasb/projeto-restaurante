@@ -29,22 +29,24 @@
                 style="cursor:pointer"
             >
                 {{$r['nome']}} 
-                <div style="text-align: right;">
-                    <button style="text-align: right;"
-                        type="button" 
-                        onclick="window.location='{{ route("restaurantes.edit", ["restaurante" => $r['id']]) }}'" 
-                        class="btn btn-secondary btn-sm"
-                    >
-                        Editar Restaurante
-                    </button>
-                    <button 
-                        type="button" 
-                        onclick="window.location='{{ route("restaurantes.destroy", ["restaurante" => $r['id']]) }}'" 
-                        class="btn btn-danger btn-sm"
-                    >
-                        Deletar Restaurante
-                    </button>
-                </div>
+                @if(session()->has('token') and !empty(session('token')))
+                    <div style="text-align: right;">
+                        <button style="text-align: right;"
+                            type="button" 
+                            onclick="window.location='{{ route("restaurantes.edit", ["restaurante" => $r['id']]) }}'" 
+                            class="btn btn-secondary btn-sm"
+                        >
+                            Editar Restaurante
+                        </button>
+                        <button 
+                            type="button" 
+                            onclick="window.location='{{ route("restaurantes.destroy", ["restaurante" => $r['id']]) }}'" 
+                            class="btn btn-danger btn-sm"
+                        >
+                            Deletar Restaurante
+                        </button>
+                    </div>
+                @endif
             </li>
         @endforeach 
         <br/>
