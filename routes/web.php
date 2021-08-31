@@ -17,3 +17,4 @@ Route::get('/login', [App\Http\Controllers\AuthController::class, 'create'])->na
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('logar');
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 Route::resource('/restaurantes', App\Http\Controllers\RestauranteController::class);
+Route::resource('/cardapios', App\Http\Controllers\CardapioController::class);
