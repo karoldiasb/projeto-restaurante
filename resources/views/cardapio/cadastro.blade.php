@@ -8,10 +8,15 @@
         {{ csrf_field() }} 
         <div class="form-group">
             <br/>
+            @if(!empty($msg))
+                <div class="alert alert-danger" role="alert">
+                    {{$msg}}
+                </div>
+            @endif
             <label for="restaurante">Restaurante:</label>
             <select class="form-select" name="restaurante_id" id="restaurante_id">
                 @foreach($data as $r)
-                    <option value="$r['id']" name="restaurante_id">{{$r['nome']}}</option>
+                    <option value="{{$r['id']}}">{{$r['nome']}}</option>
                 @endforeach
             </select>
             <br/>
@@ -34,6 +39,7 @@
                 @endforeach
             @endif
         </div>
+
         <br>
         <div style="text-align: right;">
             <button type="submit" class="btn btn-primary">Cadastrar</button>

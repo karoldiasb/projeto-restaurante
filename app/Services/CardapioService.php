@@ -10,10 +10,12 @@ class CardapioService
         return Http::get(config("app.url_api") . 'cardapios');
     }
 
-    public static function save($token, $nome)
+    public static function save($token, $request)
     {
         return Http::withToken($token)->post(config("app.url_api") . 'cardapios', [
-            'nome' =>  $nome
+            'descricao' =>  $request->descricao,
+            'ativo' =>  $request->ativo,
+            'restaurante_id' =>  $request->restaurante_id
         ]);
     }
 
