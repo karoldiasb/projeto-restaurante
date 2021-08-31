@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\Services\AuthService;
 
 class AuthController extends Controller
 {
@@ -18,11 +19,8 @@ class AuthController extends Controller
     }
     public function login(Request $request)
     {
-        $response = Http::post('http://localhost:8081/api/auth/login/', [
-            'email' => $request->email,
-            'password' => $request->password
-        ]);
-        
+        $response = AuthService::login($request);
+
         if($response->json()['success']){
             session(['token' => $response->json()['access_token']]);
             return redirect()->route('restaurantes.index');
@@ -37,7 +35,8 @@ class AuthController extends Controller
 
     public function logout()
     {
-        $response = Http::get('http://localhost:8081/api/auth/logout/');
+        $response = AuthService::logout();
+
         if($response->json()['success']){
             session(['token' => ""]);
         }
