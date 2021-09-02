@@ -1,6 +1,11 @@
 @extends('layout.base')
 
 @section('conteudo')
+    @error('msg')
+        <div class="alert alert-danger" role="alert">
+            {{ $message }}                     
+        </div>
+    @enderror
     <h1>Restaurantes Disponíveis</h1>
     @if(session()->has('token') and !empty(session('token')))
     <div style="text-align: right;">
@@ -18,6 +23,13 @@
         >
             Adicionar Cardápio
         </button>
+        <button 
+            type="button" 
+            onclick="window.location='{{ route("produtos.create") }}'" 
+            class="btn btn-primary button"
+        >
+            Adicionar Produtos
+        </button>
     </div>
     @endif
     <br/><br/>
@@ -30,21 +42,19 @@
             >
                 {{$r['nome']}} 
                 @if(session()->has('token') and !empty(session('token')))
-                    <div style="text-align: right;">
-                        <button style="text-align: right;"
+                    <div style="display: -webkit-inline-box">
+                        <button
                             type="button" 
                             onclick="window.location='{{ route("restaurantes.edit", ["restaurante" => $r['id']]) }}'" 
                             class="btn btn-secondary btn-sm"
                         >
                             Editar Restaurante
                         </button>
-                        <button 
-                            type="button" 
-                            onclick="window.location='{{ route("restaurantes.destroy", ["restaurante" => $r['id']]) }}'" 
-                            class="btn btn-danger btn-sm"
-                        >
-                            Deletar Restaurante
-                        </button>
+                        <form action='{{ route("restaurantes.destroy", ["restaurante" => $r['id']]) }}' method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Deletar Restaurante</button>
+                        </form>
                     </div>
                 @endif
             </li>
@@ -60,14 +70,62 @@
     function update(restaurante) {
         $('#selecionado').empty();
         $("#selecionado").append(`<h2>Restaurante ${restaurante.nome}</h2>`);
-
+        
         let cardapios = '';
+        let html_cardapio = '';
         restaurante.cardapios.forEach(function(c){
-            cardapios+=`<h4> - ${c.descricao}</h4>`;
+            let url_edit = '{{ route("cardapios.edit", ["cardapio" => ":cardapio_id"]) }}';
+            url_edit = url_edit.replace(':cardapio_id', c.id);
+            let url_destroy = '{{ route("cardapios.destroy", ["cardapio" => ":cardapio_id"]) }}';
+            url_destroy = url_destroy.replace(':cardapio_id', c.id);
+
+            let ativo = 'Ativo';
+            if(c.ativo != 1){
+                ativo = 'Inativo'
+            }
+            html_cardapio = `
+                <h4> - ${c.descricao} (${ativo})</h4>
+                <div style="display: -webkit-inline-box">
+                    <button
+                        type="button" 
+                        onclick="window.location='${url_edit}'" 
+                        class="btn btn-secondary btn-sm"
+                    >
+                        Editar Cardápio
+                    </button>
+                    <form action='${url_destroy}' method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Deletar Cardápio</button>
+                    </form>
+                </div>
+                <br/>
+            `;
+            cardapios+=html_cardapio;
             if(c.produtos.length > 0){
                 cardapios+='<ul class="list-group">';
                 c.produtos.forEach(function(p){
-                    cardapios += `<li class="list-group-item">${p.descricao}</li>`;
+                    let url_edit = '{{ route("produtos.edit", ["produto" => ":produto_id"]) }}';
+                    url_edit = url_edit.replace(':produto_id', p.id);
+                    let url_destroy = '{{ route("produtos.destroy", ["produto" => ":produto_id"]) }}';
+                    url_destroy = url_destroy.replace(':produto_id', p.id);
+                    cardapios += `
+                        <li class="list-group-item">${p.descricao}
+                        <div style="display: -webkit-inline-box">
+                            <button
+                                type="button" 
+                                onclick="window.location='${url_edit}'" 
+                                class="btn btn-secondary btn-sm"
+                            >
+                                Editar Produto
+                            </button>
+                            <form action='${url_destroy}' method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Deletar Produto</button>
+                            </form>
+                        </div>
+                        </li>`;
                 });
                 cardapios += '</ul>';
             }else{

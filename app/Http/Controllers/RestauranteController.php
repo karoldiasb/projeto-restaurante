@@ -60,7 +60,7 @@ class RestauranteController extends Controller
         if($success){
             return redirect()->route('restaurantes.index');
         }
-        return $this->returnError($response, 'restaurante.cadastro');
+        return $this->returnError($response);
     }
 
 
@@ -81,7 +81,7 @@ class RestauranteController extends Controller
                 compact(['restaurante'])
             );
         }
-        return $this->returnError($response, 'home');
+        return $this->returnError($response);
     }
 
     /**
@@ -104,7 +104,7 @@ class RestauranteController extends Controller
         if($success){
             return redirect()->route('restaurantes.index');
         }
-        return $this->returnError($response, 'restaurante.edicao');
+        return $this->returnError($response);
     }
 
     /**
@@ -115,6 +115,12 @@ class RestauranteController extends Controller
      */
     public function destroy($id)
     {
+        $restaurante = RestauranteService::getById($id);
+        if(count($restaurante->json()['results']['cardapios']) > 0){
+            return redirect()->back()->withErrors([
+                'msg' => 'Há cardápios cadastrados neste restaurante. É necessário excluí-los!'
+            ]);   
+        }
         $token = session('token');
         $response = RestauranteService::delete($token, $id);
         
@@ -126,7 +132,7 @@ class RestauranteController extends Controller
         if($success){
             return redirect()->route('restaurantes.index');
         }
-        return $this->returnError($response, 'home');
+        return $this->returnError($response);
     }
 
 }

@@ -7,13 +7,17 @@
     <form action="{{ route('restaurantes.store') }}" method="post">
         {{ csrf_field() }} 
         <div class="form-group">
+            <br/>
+            @error('msg')
+                <div class="alert alert-danger" role="alert">
+                    {{ $message }}                     
+                </div>
+            @enderror
             <label for="nome">Nome:</label>
             <input type="text" class="form-control" name="nome" id="nome"/>
-            @if(!empty($error_validator['nome']))
-                @foreach($error_validator['nome'] as $erro)
-                    <strong style="color:red"> {{ $erro }} </strong>
-                @endforeach
-            @endif
+            @error('nome')
+                <strong style="color:red"> {{ $message }} </strong>
+            @enderror
         </div>
         <br>
         <div style="text-align: right;">

@@ -33,6 +33,6 @@ class UserController extends Controller
         if($success){
             return redirect()->route('login');
         }
-        return $this->returnError($response, 'auth.registro');
+        return $this->returnError($response);
    }
 }

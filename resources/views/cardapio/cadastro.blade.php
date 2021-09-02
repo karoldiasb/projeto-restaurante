@@ -8,11 +8,11 @@
         {{ csrf_field() }} 
         <div class="form-group">
             <br/>
-            @if(!empty($msg))
+            @error('msg')
                 <div class="alert alert-danger" role="alert">
-                    {{$msg}}
+                    {{ $message }}                     
                 </div>
-            @endif
+            @enderror
             <label for="restaurante">Restaurante:</label>
             <select class="form-select" name="restaurante_id" id="restaurante_id">
                 @foreach($data as $r)
@@ -22,22 +22,18 @@
             <br/>
             <label for="descricao">Descrição:</label>
             <input type="text" class="form-control" name="descricao" id="descricao"/>
-            @if(!empty($error_validator['descricao']))
-                @foreach($error_validator['descricao'] as $erro)
-                    <strong style="color:red"> {{ $erro }} </strong>
-                @endforeach
-            @endif
+            @error('descricao')
+                <strong style="color:red"> {{ $message }} </strong>
+            @enderror
             <br/>
             <label for="ativo">Ativo:</label>
             <select name="ativo" id="ativo" class="form-select">
                 <option value="1">Sim</option>
                 <option value="0">Não</option>
             </select>
-            @if(!empty($error_validator['ativo']))
-                @foreach($error_validator['ativo'] as $erro)
-                    <strong style="color:red"> {{ $erro }} </strong>
-                @endforeach
-            @endif
+            @error('ativo')
+                <strong style="color:red"> {{ $message }} </strong>
+            @enderror
         </div>
 
         <br>

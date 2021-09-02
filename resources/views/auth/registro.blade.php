@@ -5,27 +5,29 @@
     <form action="{{ route('registrar') }}" method="post">
         {{ csrf_field() }} 
         <div class="form-group">
+            <br/>
+            @error('msg')
+                <div class="alert alert-danger" role="alert">
+                    {{ $message }}                     
+                </div>
+            @enderror
             <label for="nome">Nome:</label>
             <input type="nome" class="form-control" name="nome" id="nome"/>
-            @if(!empty($error_validator['nome']))
-                @foreach($error_validator['nome'] as $erro)
-                    <strong style="color:red"> {{ $erro }} </strong>
-                @endforeach
-            @endif
+            @error('nome')
+                <strong style="color:red"> {{ $message }} </strong>
+                <br/>
+            @enderror
             <label for="email">Email:</label>
             <input type="email" class="form-control" name="email" id="email"/>
-            @if(!empty($error_validator['email']))
-                @foreach($error_validator['email'] as $erro)
-                    <strong style="color:red"> {{ $erro }} </strong>
-                @endforeach
-            @endif
+            @error('email')
+                <strong style="color:red"> {{ $message }} </strong>
+                <br/>
+            @enderror
             <label for="password">Senha:</label>
             <input type="password" class="form-control" name="password" id="password"/>
-            @if(!empty($error_validator['password']))
-                @foreach($error_validator['password'] as $erro)
-                    <strong style="color:red"> {{ $erro }} </strong>
-                @endforeach
-            @endif
+            @error('password')
+                <strong style="color:red"> {{ $message }} </strong>
+            @enderror
         </div>
         <br>
         <div style="text-align: right;">
