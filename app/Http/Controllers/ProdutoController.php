@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\RestauranteService;
 use App\Services\CardapioService;
+use App\Services\ProdutoService;
 use App\Traits\VerifyToken;
 use App\Traits\Error;
 
-class CardapioController extends Controller
+class ProdutoController extends Controller
 {
     use VerifyToken;
     use Error;
@@ -20,10 +20,10 @@ class CardapioController extends Controller
      */
     public function create()
     {
-        $response = RestauranteService::index();
+        $response = CardapioService::index();
         $data = $response->json()['results'];
         return view(
-            'cardapio.cadastro',
+            'produto.cadastro',
             compact('data')
         );
     }
@@ -37,7 +37,7 @@ class CardapioController extends Controller
     public function store(Request $request)
     {
         $token = session('token');
-        $response = CardapioService::save($token, $request);
+        $response = ProdutoService::save($token, $request);
         
         if($this->isTokenInvalid($response)){
             return redirect()->route('login');
@@ -58,15 +58,15 @@ class CardapioController extends Controller
      */
     public function edit($id)
     {
-        $response = CardapioService::getById($id);
-        $responseService = RestauranteService::index();
+        $response = ProdutoService::getById($id);
+        $responseService = CardapioService::index();
         $data = $responseService->json()['results'];
         $success = $response->json()['success'];
         if($success){
-            $cardapio = $response->json()['results'];
+            $produto = $response->json()['results'];
             return view(
-                'cardapio.edicao',
-                compact(['cardapio','data'])
+                'produto.edicao',
+                compact(['produto','data'])
             );
         }
         return $this->returnError($response);
@@ -82,7 +82,7 @@ class CardapioController extends Controller
     public function update(Request $request, $id)
     {
         $token = session('token');
-        $response = CardapioService::update($token, $id, $request);
+        $response = ProdutoService::update($token, $id, $request);
         
         if($this->isTokenInvalid($response)){
             return redirect()->route('login');
@@ -103,14 +103,8 @@ class CardapioController extends Controller
      */
     public function destroy($id)
     {
-        $cardapio = CardapioService::getById($id);
-        if(count($cardapio->json()['results']['produtos']) > 0){
-            return redirect()->back()->withErrors([
-                'msg' => 'Há produtos cadastrados neste cardápio. É necessário excluí-los!'
-            ]);   
-        }
         $token = session('token');
-        $response = CardapioService::delete($token, $id);
+        $response = ProdutoService::delete($token, $id);
         
         if($this->isTokenInvalid($response)){
             return redirect()->route('login');

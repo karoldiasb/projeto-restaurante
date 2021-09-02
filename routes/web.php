@@ -22,3 +22,4 @@ Route::post('/registrar', [App\Http\Controllers\UserController::class, 'store'])
 
 Route::resource('/restaurantes', App\Http\Controllers\RestauranteController::class);
 Route::resource('/cardapios', App\Http\Controllers\CardapioController::class);
+Route::resource('/produtos', App\Http\Controllers\ProdutoController::class);
