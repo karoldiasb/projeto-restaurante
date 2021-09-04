@@ -16,7 +16,7 @@
             <label for="restaurante">Restaurante:</label>
             <select class="form-select" name="restaurante_id" id="restaurante_id">
                 @foreach($data as $r)
-                    <option value="{{$r['id']}}">{{$r['nome']}}</option>
+                    <option value="{{$r->id}}">{{$r->nome}}</option>
                 @endforeach
             </select>
             <br/>
