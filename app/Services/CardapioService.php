@@ -5,9 +5,11 @@ use Illuminate\Support\Facades\Http;
 
 class CardapioService 
 {
-    public static function index()
+    public static function index($user_id = null)
     {
-        return Http::get(config("app.url_api") . 'cardapios');
+        return Http::get(config("app.url_api") . 'cardapios', [
+            'user_id' => $user_id
+        ]);
     }
 
     public static function save($token, $request)

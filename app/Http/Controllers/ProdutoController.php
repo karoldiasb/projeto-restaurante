@@ -20,7 +20,8 @@ class ProdutoController extends Controller
      */
     public function create()
     {
-        $response = CardapioService::index();
+        $user_id = session('user_id');
+        $response = CardapioService::index($user_id);
         $data = $response->json()['results'];
         return view(
             'produto.cadastro',

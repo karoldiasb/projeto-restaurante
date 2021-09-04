@@ -20,9 +20,12 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $response = AuthService::login($request);
-
+        
         if($response->json()['success']){
-            session(['token' => $response->json()['access_token']]);
+            session([
+                'token' => $response->json()['access_token'],
+                'user_id' => $response->json()['user_id']
+            ]);
             return redirect()->route('restaurantes.index');
         }
 
@@ -39,6 +42,7 @@ class AuthController extends Controller
 
         if($response->json()['success']){
             session(['token' => ""]);
+            session(['user_id' => ""]);
         }
         return redirect()->route('restaurantes.index');
     }

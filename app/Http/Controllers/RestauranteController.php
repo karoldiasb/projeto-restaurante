@@ -19,7 +19,8 @@ class RestauranteController extends Controller
      */
     public function index()
     {
-        $response = RestauranteService::index();
+        $user_id = session('user_id');
+        $response = RestauranteService::index($user_id );
         $success = $response->json()['success'];
         if($success){
             $restaurantes = $response->json()['results'];
@@ -50,7 +51,8 @@ class RestauranteController extends Controller
     public function store(Request $request)
     {
         $token = session('token');
-        $response = RestauranteService::save($token, $request->nome);
+        $user_id = session('user_id');
+        $response = RestauranteService::save($token, $request, $user_id);
         
         if($this->isTokenInvalid($response)){
             return redirect()->route('login');
@@ -94,7 +96,7 @@ class RestauranteController extends Controller
     public function update(Request $request, $id)
     {
         $token = session('token');
-        $response = RestauranteService::update($token, $id, $request->nome);
+        $response = RestauranteService::update($token, $id, $request);
         
         if($this->isTokenInvalid($response)){
             return redirect()->route('login');
