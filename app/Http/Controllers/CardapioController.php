@@ -57,7 +57,8 @@ class CardapioController extends Controller
     public function edit($id)
     {
         $response = CardapioService::getById($id);
-        $responseService = RestauranteService::index();
+        $user_id = session('user_id');
+        $responseService = RestauranteService::index($user_id);
         $data = $responseService->object()->results;
 
         if($response->successful()){

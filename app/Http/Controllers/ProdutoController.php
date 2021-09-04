@@ -57,7 +57,8 @@ class ProdutoController extends Controller
     public function edit($id)
     {
         $response = ProdutoService::getById($id);
-        $responseService = CardapioService::index();
+        $user_id = session('user_id');
+        $responseService = CardapioService::index($user_id);
         $data = $responseService->object()->results;
 
         if($response->successful()){
