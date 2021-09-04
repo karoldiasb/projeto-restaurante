@@ -22,7 +22,7 @@ class CardapioController extends Controller
     {
         $user_id = session('user_id');
         $response = RestauranteService::index($user_id);
-        $data = $restaurante->object()->results;
+        $data = $response->object()->results;
         
         return view('cardapio.cadastro', compact('data'));
     }

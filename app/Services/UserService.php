@@ -8,11 +8,12 @@ class UserService
 
     public static function save($request)
     {
-        return Http::post(config("app.url_api") . 'registrar', [
-            'name' =>  $request->nome,
-            'email' =>  $request->email,
-            'password' => $request->password
-        ]);
+        return Http::withHeaders(['Accept' => 'application/json'])
+            ->post(config("app.url_api") . 'registrar', [
+                'name' =>  $request->nome,
+                'email' =>  $request->email,
+                'password' => $request->password
+            ]);
     }
 
     

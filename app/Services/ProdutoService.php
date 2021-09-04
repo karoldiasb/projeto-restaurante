@@ -12,10 +12,12 @@ class ProdutoService
 
     public static function save($token, $request)
     {
-        return Http::withToken($token)->post(config("app.url_api") . 'produtos', [
-            'descricao' =>  $request->descricao,
-            'cardapio_id' =>  $request->cardapio_id
-        ]);
+        return Http::withHeaders(['Accept' => 'application/json'])
+            ->withToken($token)
+            ->post(config("app.url_api") . 'produtos', [
+                'descricao' =>  $request->descricao,
+                'cardapio_id' =>  $request->cardapio_id
+            ]);
     }
 
     public static function getById($id)
@@ -25,10 +27,12 @@ class ProdutoService
 
     public static function update($token, $id, $request)
     {
-        return Http::withToken($token)->put(config("app.url_api") . 'produtos/' . $id, [
-            'descricao' =>  $request->descricao,
-            'cardapio_id' =>  $request->cardapio_id
-        ]);
+        return Http::withHeaders(['Accept' => 'application/json'])
+            ->withToken($token)
+            ->put(config("app.url_api") . 'produtos/' . $id, [
+                'descricao' =>  $request->descricao,
+                'cardapio_id' =>  $request->cardapio_id
+            ]);
     }
 
     public static function delete($token, $id)

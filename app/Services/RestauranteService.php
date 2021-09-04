@@ -14,10 +14,12 @@ class RestauranteService
 
     public static function save($token, $request, $user_id)
     {
-        return Http::withToken($token)->post(config("app.url_api") . 'restaurantes', [
-            'nome' =>  $request->nome,
-            'user_id' => $user_id
-        ]);
+        return Http::withHeaders(['Accept' => 'application/json'])
+            ->withToken($token)
+            ->post(config("app.url_api") . 'restaurantes', [
+                'nome' =>  $request->nome,
+                'user_id' => $user_id
+            ]);
     }
 
     public static function getById($id)
@@ -27,9 +29,11 @@ class RestauranteService
 
     public static function update($token, $id, $request)
     {
-        return Http::withToken($token)->put(config("app.url_api") . 'restaurantes/' . $id, [
-            'nome' =>  $request->nome
-        ]);
+        return Http::withHeaders(['Accept' => 'application/json'])
+            ->withToken($token)
+            ->put(config("app.url_api") . 'restaurantes/' . $id, [
+                'nome' =>  $request->nome
+            ]);
     }
 
     public static function delete($token, $id)

@@ -14,11 +14,13 @@ class CardapioService
 
     public static function save($token, $request)
     {
-        return Http::withToken($token)->post(config("app.url_api") . 'cardapios', [
-            'descricao' =>  $request->descricao,
-            'ativo' =>  $request->ativo,
-            'restaurante_id' =>  $request->restaurante_id
-        ]);
+        return Http::withHeaders(['Accept' => 'application/json'])
+            ->withToken($token)
+            ->post(config("app.url_api") . 'cardapios', [
+                'descricao' =>  $request->descricao,
+                'ativo' =>  $request->ativo,
+                'restaurante_id' =>  $request->restaurante_id
+            ]);
     }
 
     public static function getById($id)
@@ -28,11 +30,13 @@ class CardapioService
 
     public static function update($token, $id, $request)
     {
-        return Http::withToken($token)->put(config("app.url_api") . 'cardapios/' . $id, [
-            'descricao' =>  $request->descricao,
-            'ativo' =>  $request->ativo,
-            'restaurante_id' =>  $request->restaurante_id
-        ]);
+        return Http::withHeaders(['Accept' => 'application/json'])
+            ->withToken($token)
+            ->put(config("app.url_api") . 'cardapios/' . $id, [
+                'descricao' =>  $request->descricao,
+                'ativo' =>  $request->ativo,
+                'restaurante_id' =>  $request->restaurante_id
+            ]);
     }
 
     public static function delete($token, $id)
