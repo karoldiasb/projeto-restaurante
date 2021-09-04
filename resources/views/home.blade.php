@@ -73,6 +73,7 @@
         
         let cardapios = '';
         let html_cardapio = '';
+        const session = "<?php echo session('token')?>";
         restaurante.cardapios.forEach(function(c){
             let url_edit = '{{ route("cardapios.edit", ["cardapio" => ":cardapio_id"]) }}';
             url_edit = url_edit.replace(':cardapio_id', c.id);
@@ -83,8 +84,9 @@
             if(c.ativo != 1){
                 ativo = 'Inativo'
             }
-            html_cardapio = `
-                <h4> - ${c.descricao} (${ativo})</h4>
+            html_cardapio = `<h4> - ${c.descricao} (${ativo})</h4>`;
+            if(session.length > 0){
+                html_cardapio += `
                 <div style="display: -webkit-inline-box">
                     <button
                         type="button" 
@@ -101,6 +103,8 @@
                 </div>
                 <br/>
             `;
+            }
+            
             cardapios+=html_cardapio;
             if(c.produtos.length > 0){
                 cardapios+='<ul class="list-group">';
@@ -109,23 +113,28 @@
                     url_edit = url_edit.replace(':produto_id', p.id);
                     let url_destroy = '{{ route("produtos.destroy", ["produto" => ":produto_id"]) }}';
                     url_destroy = url_destroy.replace(':produto_id', p.id);
-                    cardapios += `
-                        <li class="list-group-item">${p.descricao}
-                        <div style="display: -webkit-inline-box">
-                            <button
-                                type="button" 
-                                onclick="window.location='${url_edit}'" 
-                                class="btn btn-secondary btn-sm"
-                            >
-                                Editar Produto
-                            </button>
-                            <form action='${url_destroy}' method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Deletar Produto</button>
-                            </form>
-                        </div>
-                        </li>`;
+
+                    cardapios += `<li class="list-group-item">${p.descricao}`;
+                    if(session.length > 0){
+                        cardapios += `
+                            <div style="display: -webkit-inline-box">
+                                <button
+                                    type="button" 
+                                    onclick="window.location='${url_edit}'" 
+                                    class="btn btn-secondary btn-sm"
+                                >
+                                    Editar Produto
+                                </button>
+                                <form action='${url_destroy}' method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Deletar Produto</button>
+                                </form>
+                            </div>
+                            `;
+                    }
+                    cardapios += '</li>';
+                   
                 });
                 cardapios += '</ul>';
             }else{
