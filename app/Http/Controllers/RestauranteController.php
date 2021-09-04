@@ -21,15 +21,13 @@ class RestauranteController extends Controller
     {
         $user_id = session('user_id');
         $response = RestauranteService::index($user_id );
-        $success = $response->json()['success'];
-        if($success){
-            $restaurantes = $response->json()['results'];
-            return view(
-                'home',
-                compact('restaurantes')
-            );
+
+        if($response->successful()){
+            $restaurantes = $response->object()->results;
+            return view('home', compact('restaurantes'));
         }
-        return $this->returnError($response, 'home');
+
+        return $this->returnError($response->object());
     }
 
     /**
@@ -57,12 +55,10 @@ class RestauranteController extends Controller
         if($this->isTokenInvalid($response)){
             return redirect()->route('login');
         }
-        
-        $success = $response->json()['success'];
-        if($success){
+        if($response->successful()){
             return redirect()->route('restaurantes.index');
         }
-        return $this->returnError($response);
+        return $this->returnError($response->object());
     }
 
 
@@ -75,15 +71,14 @@ class RestauranteController extends Controller
     public function edit($id)
     {
         $response = RestauranteService::getById($id);
-        $success = $response->json()['success'];
-        if($success){
-            $restaurante = $response->json()['results'];
+        if($response->successful()){
+            $restaurante = $response->object()->results;
             return view(
                 'restaurante.edicao',
                 compact(['restaurante'])
             );
         }
-        return $this->returnError($response);
+        return $this->returnError($response->object());
     }
 
     /**
@@ -102,11 +97,10 @@ class RestauranteController extends Controller
             return redirect()->route('login');
         }
 
-        $success = $response->json()['success'];
-        if($success){
+        if($response->successful()){
             return redirect()->route('restaurantes.index');
         }
-        return $this->returnError($response);
+        return $this->returnError($response->object());
     }
 
     /**
@@ -118,9 +112,11 @@ class RestauranteController extends Controller
     public function destroy($id)
     {
         $restaurante = RestauranteService::getById($id);
-        if(count($restaurante->json()['results']['cardapios']) > 0){
+
+        if(count($restaurante->object()->results->cardapios) > 0){
             return redirect()->back()->withErrors([
-                'msg' => 'Há cardápios cadastrados neste restaurante. É necessário excluí-los!'
+                'msg' => 'Há cardápios cadastrados neste restaurante. 
+                Para que seja possível excluir o restaurante, é necessário excluí-los!'
             ]);   
         }
         $token = session('token');
@@ -130,11 +126,10 @@ class RestauranteController extends Controller
             return redirect()->route('login');
         }
 
-        $success = $response->json()['success'];
-        if($success){
+        if($response->successful()){
             return redirect()->route('restaurantes.index');
         }
-        return $this->returnError($response);
+        return $this->returnError($response->object());
     }
 
 }

@@ -22,11 +22,9 @@ class CardapioController extends Controller
     {
         $user_id = session('user_id');
         $response = RestauranteService::index($user_id);
-        $data = $response->json()['results'];
-        return view(
-            'cardapio.cadastro',
-            compact('data')
-        );
+        $data = $restaurante->object()->results;
+        
+        return view('cardapio.cadastro', compact('data'));
     }
 
     /**
@@ -44,11 +42,10 @@ class CardapioController extends Controller
             return redirect()->route('login');
         }
         
-        $success = $response->json()['success'];
-        if($success){
+        if($response->successful()){
             return redirect()->route('restaurantes.index');
         }
-        return $this->returnError($response);
+        return $this->returnError($response->object());
     }
 
     /**
@@ -61,16 +58,13 @@ class CardapioController extends Controller
     {
         $response = CardapioService::getById($id);
         $responseService = RestauranteService::index();
-        $data = $responseService->json()['results'];
-        $success = $response->json()['success'];
-        if($success){
-            $cardapio = $response->json()['results'];
-            return view(
-                'cardapio.edicao',
-                compact(['cardapio','data'])
-            );
+        $data = $responseService->object()->results;
+
+        if($response->successful()){
+            $cardapio = $response->object()->results;
+            return view('cardapio.edicao', compact(['cardapio','data']));
         }
-        return $this->returnError($response);
+        return $this->returnError($response->object());
     }
 
     /**
@@ -89,11 +83,10 @@ class CardapioController extends Controller
             return redirect()->route('login');
         }
 
-        $success = $response->json()['success'];
-        if($success){
+        if($response->successful()){
             return redirect()->route('restaurantes.index');
         }
-        return $this->returnError($response);
+        return $this->returnError($response->object());
     }
 
     /**
@@ -105,9 +98,10 @@ class CardapioController extends Controller
     public function destroy($id)
     {
         $cardapio = CardapioService::getById($id);
-        if(count($cardapio->json()['results']['produtos']) > 0){
+        if(count($cardapio->object()->results->produtos) > 0){
             return redirect()->back()->withErrors([
-                'msg' => 'Há produtos cadastrados neste cardápio. É necessário excluí-los!'
+                'msg' => 'Há produtos cadastrados neste cardápio. 
+                Para que seja possível excluir o cardápio, é necessário excluí-los!'
             ]);   
         }
         $token = session('token');
@@ -117,11 +111,10 @@ class CardapioController extends Controller
             return redirect()->route('login');
         }
 
-        $success = $response->json()['success'];
-        if($success){
+        if($response->successful()){
             return redirect()->route('restaurantes.index');
         }
-        return $this->returnError($response);
+        return $this->returnError($response->object());
     }
 
 }

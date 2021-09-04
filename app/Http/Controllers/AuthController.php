@@ -21,15 +21,14 @@ class AuthController extends Controller
     {
         $response = AuthService::login($request);
         
-        if($response->json()['success']){
+        if($response->successful()){
             session([
                 'token' => $response->json()['access_token'],
                 'user_id' => $response->json()['user_id']
             ]);
             return redirect()->route('restaurantes.index');
         }
-
-        $error = $response->json()['error'];
+        $error = $response->object()->message;
         return view(
             'auth.login',
             compact('error')
@@ -40,7 +39,7 @@ class AuthController extends Controller
     {
         $response = AuthService::logout();
 
-        if($response->json()['success']){
+        if($response->successful()){
             session(['token' => ""]);
             session(['user_id' => ""]);
         }

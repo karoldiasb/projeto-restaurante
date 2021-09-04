@@ -6,8 +6,11 @@ trait VerifyToken
 {
     public function isTokenInvalid($response)
     {
-        if(isset($response->json()['status'])){
-            session(['token' => ""]);
+        if(isset($response->object()->status)){
+            session([
+                'token' => "", 
+                "user_id" => ""
+            ]);
             return TRUE;
         }
         return FALSE;

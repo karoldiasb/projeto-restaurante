@@ -16,7 +16,7 @@
             <label for="restaurante">Cardápio:</label>
             <select class="form-select" name="cardapio_id" id="cardapio_id">
                 @foreach($data as $r)
-                    <option value="{{$r['id']}}">{{$r['descricao']}} - {{$r['restaurante']['nome']}}</option>
+                    <option value="{{$r->id}}">{{$r->descricao}} - {{$r->restaurante->nome}}</option>
                 @endforeach
             </select>
             <br/>

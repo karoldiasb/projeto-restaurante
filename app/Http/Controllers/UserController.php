@@ -29,10 +29,9 @@ class UserController extends Controller
    {
         $response = UserService::save($request);
 
-        $success = $response->json()['success'];
-        if($success){
+        if($response->successful()){
             return redirect()->route('login');
         }
-        return $this->returnError($response);
+        return $this->returnError($response->object());
    }
 }

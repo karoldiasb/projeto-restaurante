@@ -22,11 +22,9 @@ class ProdutoController extends Controller
     {
         $user_id = session('user_id');
         $response = CardapioService::index($user_id);
-        $data = $response->json()['results'];
-        return view(
-            'produto.cadastro',
-            compact('data')
-        );
+        $data = $response->object()->results;
+
+        return view('produto.cadastro', compact('data'));
     }
 
     /**
@@ -44,11 +42,10 @@ class ProdutoController extends Controller
             return redirect()->route('login');
         }
         
-        $success = $response->json()['success'];
-        if($success){
+        if($response->successful()){
             return redirect()->route('restaurantes.index');
         }
-        return $this->returnError($response);
+        return $this->returnError($response->object());
     }
 
     /**
@@ -61,16 +58,13 @@ class ProdutoController extends Controller
     {
         $response = ProdutoService::getById($id);
         $responseService = CardapioService::index();
-        $data = $responseService->json()['results'];
-        $success = $response->json()['success'];
-        if($success){
-            $produto = $response->json()['results'];
-            return view(
-                'produto.edicao',
-                compact(['produto','data'])
-            );
+        $data = $responseService->object()->results;
+
+        if($response->successful()){
+            $produto = $response->object()->results;
+            return view('produto.edicao', compact(['produto','data']));
         }
-        return $this->returnError($response);
+        return $this->returnError($response->object());
     }
 
     /**
@@ -89,11 +83,10 @@ class ProdutoController extends Controller
             return redirect()->route('login');
         }
 
-        $success = $response->json()['success'];
-        if($success){
+        if($response->successful()){
             return redirect()->route('restaurantes.index');
         }
-        return $this->returnError($response);
+        return $this->returnError($response->object());
     }
 
     /**
@@ -111,11 +104,10 @@ class ProdutoController extends Controller
             return redirect()->route('login');
         }
 
-        $success = $response->json()['success'];
-        if($success){
+        if($response->successful()){
             return redirect()->route('restaurantes.index');
         }
-        return $this->returnError($response);
+        return $this->returnError($response->object());
     }
 
 }
