@@ -20,7 +20,7 @@ php artisan key:generate (dentro do docker)
 ## Copie o arquivo ".env.example", cole na raiz do projeto e renomeie para ".env"
 
 
-## Acesse a API em:
+## Acesse em:
 ```
 http://localhost:8082/restaurantes
 ```
