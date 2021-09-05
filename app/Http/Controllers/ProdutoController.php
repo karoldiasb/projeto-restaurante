@@ -39,7 +39,8 @@ class ProdutoController extends Controller
         $response = ProdutoService::save($token, $request);
         
         if($this->isTokenInvalid($response)){
-            return redirect()->route('login');
+            $msg = "Sessão expirada. Por favor, faça o login novamente";
+            return view('auth.login', compact('msg'));
         }
         
         if($response->successful()){
@@ -81,7 +82,8 @@ class ProdutoController extends Controller
         $response = ProdutoService::update($token, $id, $request);
         
         if($this->isTokenInvalid($response)){
-            return redirect()->route('login');
+            $msg = "Sessão expirada. Por favor, faça o login novamente";
+            return view('auth.login', compact('msg'));
         }
 
         if($response->successful()){
@@ -102,7 +104,8 @@ class ProdutoController extends Controller
         $response = ProdutoService::delete($token, $id);
         
         if($this->isTokenInvalid($response)){
-            return redirect()->route('login');
+            $msg = "Sessão expirada. Por favor, faça o login novamente";
+            return view('auth.login', compact('msg'));
         }
 
         if($response->successful()){

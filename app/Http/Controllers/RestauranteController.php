@@ -53,7 +53,8 @@ class RestauranteController extends Controller
         $response = RestauranteService::save($token, $request, $user_id);
         
         if($this->isTokenInvalid($response)){
-            return redirect()->route('login');
+            $msg = "Sessão expirada. Por favor, faça o login novamente";
+            return view('auth.login', compact('msg'));
         }
         if($response->successful()){
             return redirect()->route('restaurantes.index');
@@ -94,7 +95,8 @@ class RestauranteController extends Controller
         $response = RestauranteService::update($token, $id, $request);
         
         if($this->isTokenInvalid($response)){
-            return redirect()->route('login');
+            $msg = "Sessão expirada. Por favor, faça o login novamente";
+            return view('auth.login', compact('msg'));
         }
 
         if($response->successful()){
@@ -112,18 +114,19 @@ class RestauranteController extends Controller
     public function destroy($id)
     {
         $restaurante = RestauranteService::getById($id);
-
         if(count($restaurante->object()->results->cardapios) > 0){
             return redirect()->back()->withErrors([
                 'msg' => 'Há cardápios cadastrados neste restaurante. 
                 Para que seja possível excluir o restaurante, é necessário excluí-los!'
             ]);   
         }
+        
         $token = session('token');
         $response = RestauranteService::delete($token, $id);
         
         if($this->isTokenInvalid($response)){
-            return redirect()->route('login');
+            $msg = "Sessão expirada. Por favor, faça o login novamente";
+            return view('auth.login', compact('msg'));
         }
 
         if($response->successful()){

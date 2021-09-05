@@ -39,7 +39,8 @@ class CardapioController extends Controller
         $response = CardapioService::save($token, $request);
         
         if($this->isTokenInvalid($response)){
-            return redirect()->route('login');
+            $msg = "Sessão expirada. Por favor, faça o login novamente";
+            return view('auth.login', compact('msg'));
         }
         
         if($response->successful()){
@@ -81,7 +82,8 @@ class CardapioController extends Controller
         $response = CardapioService::update($token, $id, $request);
         
         if($this->isTokenInvalid($response)){
-            return redirect()->route('login');
+            $msg = "Sessão expirada. Por favor, faça o login novamente";
+            return view('auth.login', compact('msg'));
         }
 
         if($response->successful()){
@@ -105,11 +107,13 @@ class CardapioController extends Controller
                 Para que seja possível excluir o cardápio, é necessário excluí-los!'
             ]);   
         }
+        
         $token = session('token');
         $response = CardapioService::delete($token, $id);
         
         if($this->isTokenInvalid($response)){
-            return redirect()->route('login');
+            $msg = "Sessão expirada. Por favor, faça o login novamente";
+            return view('auth.login', compact('msg'));
         }
 
         if($response->successful()){

@@ -11,7 +11,6 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-end">
         @if(session()->has('token') and !empty(session('token')))
-            {{ session()->get('email') }}
             <a class="navbar-brand" href="/logout">Sair</a>
         @else
             <a class="navbar-brand" href="/login">Entrar</a>
