@@ -10,15 +10,13 @@ docker-compose up --build -d
 ```
 composer install (dentro do docker)
 ```
+## Copie o arquivo ".env.example", cole na raiz do projeto e renomeie para ".env"
 
 ## Configuração do ambiente
 #### Geração da APP_KEY
 ```
 php artisan key:generate (dentro do docker)
 ```
-
-## Copie o arquivo ".env.example", cole na raiz do projeto e renomeie para ".env"
-
 
 ## Acesse em:
 ```
