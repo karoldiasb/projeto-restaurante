@@ -4,12 +4,26 @@ Projeto que realiza registro de usuário, login e logout e gerenciamento das inf
 
 ## Instalação do ambiente
 ```
-docker-compose up --build -d
+docker-compose build
+```
+```
+docker-compose up -d
+```
+## Dar permissão ao usuário (caso seja terminal linux)
+```
+sudo chown -R user:user ./
 ```
 
+## Para entrar no docker
+```
+docker exec -it projeto-restaurante-php bash
+```
+
+## Instalar dependências
 ```
 composer install (dentro do docker)
 ```
+
 ## Copie o arquivo ".env.example", cole na raiz do projeto e renomeie para ".env"
 
 ## Configuração do ambiente
